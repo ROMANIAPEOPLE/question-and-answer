@@ -19,5 +19,13 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
+	
+	public void update(User newUser) {
+		this.password= newUser.password;
+		this.email = newUser.password;
+		this.name = newUser.name;
+		
+		
+	}
 
 }
