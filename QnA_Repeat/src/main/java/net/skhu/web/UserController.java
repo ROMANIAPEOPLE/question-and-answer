@@ -16,85 +16,93 @@ import net.skhu.domain.UserRepository;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@GetMapping("/loginForm")
 	public String loginForm() {
 		return "/user/login";
 	}
-	
+
 	@PostMapping("/login")
 	public String login(String userId, String password, HttpSession session) {
 		User user = userRepository.findByUserId(userId);
-		
-		if(user == null) {
+
+		if (user == null) {
 			System.out.println("Login - failed");
 			return "redirect:/users/loginForm";
 		}
-		if(!password.equals(user.getPassword())) {
+		if (!user.matchPassword(password)) {
 			System.out.println("Login - failed");
 			return "redirect:/users/loginForm";
 		}
-		
+
 		System.out.println("Login - Success!");
-		session.setAttribute("sessionedUser", user);
-		
+		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("sessionedUser");
+		session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
 		return "redirect:/";
 	}
+////////////////////////////////////로그인 관련 컨트롤러/////////////////////////////////////////////
 	
 	
 	@PostMapping("")
 	public String create(User user) {
 		userRepository.save(user);
 		return "redirect:/users";
-		
+
 	}
 
 	@GetMapping("")
 	public String list(Model model) {
 		model.addAttribute("users", userRepository.findAll());
 		return "/user/list";
-	}
+	}	
 	
 	@GetMapping("/form")
 	public String form() {
 		return "/user/form";
 	}
+//////////////////////////////////////회원가입, 리스트 , 회원가입 폼 컨트롤러//////////////////////////////////////
+	
 	
 	@GetMapping("/{id}/form")
 	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-		Object tempUser = session.getAttribute("sessionedUser");
-		if(tempUser == null) {
+		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "redirect:/users/loginForm";
 		}
-		
-		User sessionedUser = (User)tempUser;
-		if(!id.equals(sessionedUser.getId())) {
+
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if (!sessionedUser.matchId(id)) {
 			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
 		}
-		
-		
-		User user = userRepository.findById(id).get();  
-		model.addAttribute("user", user); 
+
+		User user = userRepository.findById(id).get();
+		model.addAttribute("user", user);
 		return "/user/updateForm";
 	}
-	
+
 	@PostMapping("/{id}")
 	public String update(@PathVariable Long id, User newUser, HttpSession session) {
+		if (!HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/loginForm";
+		}
+
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if (!sessionedUser.matchId(id)) {
+			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+		}
+
 		User user = userRepository.findById(id).get();
 		user.update(newUser);
-		userRepository.save(newUser);
+		userRepository.save(user);
 		return "redirect:/users";
 	}
-	
-	
-	
+
 }
