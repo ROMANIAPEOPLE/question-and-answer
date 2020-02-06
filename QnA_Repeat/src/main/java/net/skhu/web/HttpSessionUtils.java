@@ -17,6 +17,7 @@ public class HttpSessionUtils {
 		return true;
 	}
 
+	
 	public static User getUserFromSession(HttpSession session) {
 		if (!isLoginUser(session)) {
 			return null;
