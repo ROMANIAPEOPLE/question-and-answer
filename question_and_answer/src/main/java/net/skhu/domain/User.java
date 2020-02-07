@@ -12,7 +12,7 @@ import lombok.Data;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long id;
 	
 	private String userId;
 	private String password;
@@ -24,5 +24,21 @@ public class User {
 		this.email = newUser.email;
 		this.name = newUser.name;
 	}
+	
+	public boolean matchId(Long newId) {
+		if(newId == null) {
+			return false;
+		}
+		return newId.equals(id);
+	}
+	
+	
+	public boolean matchPassword(String newPassword) {
+		if(newPassword == null) {
+			return false;
+		}
+		return newPassword.equals(password);
+	}
+	
 	
 }
