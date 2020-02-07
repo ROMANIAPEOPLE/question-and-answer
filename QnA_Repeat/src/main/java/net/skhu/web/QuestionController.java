@@ -36,7 +36,7 @@ public class QuestionController {
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
 		// 로그인정보 를 ssesionUser에 저장(글쓴이)
 
-		Question newQuestion = new Question(sessionUser.getUserId(),title,contents);
+		Question newQuestion = new Question(sessionUser,title,contents);
 		questionRepository.save(newQuestion);
 		return "redirect:/";
 	}
