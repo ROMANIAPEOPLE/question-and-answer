@@ -15,7 +15,6 @@ import net.skhu.domain.User;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-	
 	@Autowired
 	private QuestionRepository questionRepository;
 	
@@ -32,10 +31,7 @@ public class QuestionController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/users/loginForm";
 		}
-
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
-		// 로그인정보 를 ssesionUser에 저장(글쓴이)
-
 		Question newQuestion = new Question(sessionUser,title,contents);
 		questionRepository.save(newQuestion);
 		return "redirect:/";
