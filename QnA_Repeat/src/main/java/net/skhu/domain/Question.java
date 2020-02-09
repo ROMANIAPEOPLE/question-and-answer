@@ -31,13 +31,13 @@ public class Question {
 		this.writer = user;
 		this.title = title;
 		this.contents = contents;
-		this.createDate = LocalDateTime.now();
+//		this.createDate = LocalDateTime.now();
 	}
 	public String getFormattedCreateDate() {
 		if(createDate == null) {
 			return "";
 		}
 		
-		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+//		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
 	}
 }
