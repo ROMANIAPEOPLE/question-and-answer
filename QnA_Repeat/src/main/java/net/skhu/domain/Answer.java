@@ -2,7 +2,6 @@ package net.skhu.domain;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -10,54 +9,36 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 
 @Entity
-public class Question {
+public class Answer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question+writer"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
 	private User writer;
+	
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
+	private Question question;
 
-	private String title;
+	@Lob
 	private String contents;
 
 	private LocalDateTime createDate;
 
-	@OneToMany(mappedBy= "question")
-	@OrderBy("id ASC")
-	private List<Answer> answers;
-	public Question() {
+	public Answer() {
+	}
 
-	} // JPA에서는 디폴트생성자가 필수이다.
-
-	public Question(User writer, String title, String contents) {
+	public Answer(Question question,User writer, String contents) {
 		this.writer = writer;
-		this.title = title;
 		this.contents = contents;
+		this.question = question;
 		this.createDate = LocalDateTime.now();
-	}
-
-	public String getFormattedCreateDate() {
-		if (createDate == null) {
-			return "";
-		}
-
-		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
-	}
-	
-	public void update(String title, String contents) {
-		this.title= title;
-		this.contents=contents;
-	}
-
-	public boolean isSameWriter(User loginUser) {
-		return this.writer.equals(loginUser);
 	}
 
 	@Override
@@ -76,7 +57,7 @@ public class Question {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Question other = (Question) obj;
+		Answer other = (Answer) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -85,5 +66,17 @@ public class Question {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + ", createDate=" + createDate
+				+ "]";
+	}
 	
+	public String getFormattedCreateDate() {
+		if (createDate == null) {
+			return "";
+		}
+
+		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+	}
 }
