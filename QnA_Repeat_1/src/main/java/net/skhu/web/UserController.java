@@ -34,7 +34,6 @@ public class UserController {
 		model.addAttribute("users", userRepository.findAll());
 		return "/user/list";
 	}
-	///////////기본창 : 회원가입 관련 , 회원가입 후 list로 이동하는 컨트롤러//
 	
 	
 	
