@@ -65,6 +65,7 @@ public class UserController {
 		User sessionedUser = (User) tempUser;
 		if (!id.equals(sessionedUser.getId())) {
 			throw new IllegalStateException("본인정보만.");
+			//회원정보에 있는 id와 현재 로그인된 id값을 비교
 		}
 
 		User user = userRepository.findById(id).get();
