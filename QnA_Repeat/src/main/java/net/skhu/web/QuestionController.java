@@ -33,7 +33,6 @@ public class QuestionController {
 		return Result.ok();
 	}
 
-
 	@GetMapping("/form") // 질문하기 버튼을 눌렀을때 요청되는 컨트롤러.
 	public String form(HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {

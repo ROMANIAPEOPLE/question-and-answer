@@ -26,8 +26,19 @@ public class User {
 		this.password=updateUser.password;
 		this.name=updateUser.name;
 		this.email=updateUser.email;
-		
+	}
+	public boolean mathPassword(String newPassword) {
+		if(newPassword == null) {
+			return false; //패스워스를 입력하지 않았을 경우
+		}
+		return newPassword.equals(password);
 	}
 	
+	public boolean matchId(Long newId) {
+		if(newId == null) {
+			return false;
+		}
+		return newId.equals(id);
+	}
 
 }
