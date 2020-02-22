@@ -34,7 +34,7 @@ public class QuestionController {
 		User sessionUser = HttpSessionUtils.getUserSession(session);
 		//로그인 정보
 
-		Question newQuestion = new Question(sessionUser.getUserId(), title, contents);
+		Question newQuestion = new Question(sessionUser, title, contents);
 		
 		questionRepository.save(newQuestion);
 		
