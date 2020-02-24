@@ -2,6 +2,7 @@ package net.skhu.domain;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -9,7 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Question {
@@ -20,14 +24,16 @@ public class Question {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
 	private User writer;
-	
 	private String title;
-
-	private String contents;
 	
+	@Lob
+	private String contents;
 	private LocalDateTime createDate;
 	
 
+	@OneToMany(mappedBy="question")
+	@OrderBy("id ASC")
+	private List<Answer> answers;
 	
 	public Question() {}
 	
@@ -47,6 +53,14 @@ public class Question {
 		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd.HH:mm:ss"));
 	}
 	
-	
+	public void update(String title, String contents) {
+		this.title = title;
+		this.contents = contents;
+	}
+
+	public boolean isSameWriter(User loginUser) {
+		return this.writer.equals(loginUser);
+	}
+
 	
 }
