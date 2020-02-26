@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import lombok.Data;
+
+@Data
 @Entity
 public class Answer {
 	@Id
@@ -78,5 +81,9 @@ public class Answer {
 		}
 
 		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+	}
+
+	public boolean isSameWriter(User loginUser) {
+		return loginUser.equals(this.writer);
 	}
 }
