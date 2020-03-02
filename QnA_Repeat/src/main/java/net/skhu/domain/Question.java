@@ -33,6 +33,9 @@ public class Question {
 	
 	@JsonProperty
 	private String contents;
+	
+	@JsonProperty
+	private Integer countOfAnswer = 0;
 
 	private LocalDateTime createDate;
 
@@ -90,4 +93,13 @@ public class Question {
 			return false;
 		return true;
 	}
+
+	public void addAnswer() {
+		this.countOfAnswer +=1;
+	}
+	
+	public void deleteAnswer() {
+		this.countOfAnswer -=1;
+	}
+	
 }

@@ -35,6 +35,7 @@ public class ApiAnswerController {
 		//로그인 유저 얻어옴
 		Question question = questionRepository.findById(questionId).get();
 		Answer answer = new Answer(question, loginUser, contents);
+		question.addAnswer();
 		return answerRepository.save(answer);
 	}
 	@DeleteMapping("/{id}")
@@ -50,6 +51,11 @@ public class ApiAnswerController {
 		}
 		
 		answerRepository.deleteById(id);
+		
+		Question question = questionRepository.findById(questionId).get();
+		question.deleteAnswer();
+		questionRepository.save(question);
+		
 		return Result.ok();
 		
 	}
